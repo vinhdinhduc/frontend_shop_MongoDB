@@ -1,0 +1,51 @@
+@import '../styles/variables';
+@import '../styles/globalstyle';
+// @import 'mixins';
+
+.product-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 20px;
+  
+    .product-item {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: center;
+  
+      img {
+        max-width: 100%;
+        height: auto;
+      }
+  
+      h3 {
+        font-size: 1.2em;
+        margin: 10px 0;
+      }
+  
+      p {
+        color: #007bff;
+        font-weight: bold;
+      }
+  
+      button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+  
+        &:hover {
+          background-color: #0056b3;
+        }
+      }
+    }
+  }
+  
+  // Đảm bảo responsive
+  @media (max-width: 768px) {
+    .product-list {
+      grid-template-columns: 1fr;
+    }
+  }
