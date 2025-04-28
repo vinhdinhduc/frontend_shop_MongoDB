@@ -1,0 +1,195 @@
+// Variables
+$primary-color: #2fdddd;
+$secondary-color: #3498db;
+$white: #ffffff;
+$hover-color: #2980b9;
+
+.header {
+  background-color: $primary-color;
+  padding: 1rem 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+  .header_container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  // Left side
+  .header_left {
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+
+    .header_logo {
+      img {
+        height: 40px;
+        width: auto;
+        border: none;
+      }
+    }
+
+    .header_nav {
+      .nav_list {
+        display: flex;
+        gap: 2rem;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+
+        .nav_item {
+          .nav_link {
+            color: $white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            font-size: 1.1rem;
+
+            &:hover {
+              color: $hover-color;
+            }
+          }
+          .nav_link.active {
+            background-color: #4be772;
+            border: 2px solid  #4be7cd;
+            padding: 10px;
+            font-weight: bold;
+            
+          }
+        }
+      }
+    }
+  }
+  .header_search {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  
+    .search_input {
+      width: 60%;
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      border-radius: 4px 0 0 4px;
+      outline: none;
+    }
+  
+    .search_button {
+      padding: 8px 16px;
+      background-color: #f57224; // màu cam như shopee
+      border: none;
+      color: white;
+      border-radius: 0 4px 4px 0;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s;
+  
+      &:hover {
+        background-color: #d9601a;
+      }
+    }
+  }
+  
+
+  // Right side
+  .header_right {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+
+    .auth-buttons {
+      display: flex;
+      gap: 1rem;
+
+      .auth-button {
+        color: $white;
+        text-decoration: none;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        transition: all 0.3s ease;
+        border: 1px solid rgba($white, 0.3);
+
+        &:hover {
+          background-color: $hover-color;
+          border-color: $hover-color;
+        }
+      }
+    }
+
+    .cart-button {
+      position: relative;
+      color: $white;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+
+      .cart-icon {
+        font-size: 1.5rem;
+      }
+
+      .cart-count {
+        position: absolute;
+        top: -8px;
+        right: -12px;
+        background-color: $secondary-color;
+        color: $white;
+        padding: 2px 8px;
+        border-radius: 50%;
+        font-size: 0.8rem;
+        font-weight: bold;
+      }
+    }
+    // Thêm các style mới vào file Header.scss
+.user-section {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+
+  .user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: $white;
+    text-decoration: none;
+    transition: opacity 0.3s;
+
+    &:hover {
+      opacity: 0.8;
+    }
+
+    .user-icon {
+      font-size: 1.2rem;
+    }
+
+    .user-email {
+      max-width: 150px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  .logout-button {
+    background: none;
+    border: none;
+    color: $white;
+    cursor: pointer;
+    padding: 0.5rem;
+    transition: color 0.3s;
+
+    &:hover {
+      color: $hover-color;
+    }
+  }
+}
+
+.auth-section {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+  }
+}
