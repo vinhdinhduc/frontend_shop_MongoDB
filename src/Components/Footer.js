@@ -8,6 +8,7 @@ import {
   faTiktok,
 } from "@fortawesome/free-brands-svg-icons";
 import "./Footer.scss";
+import { faEnvelope, faHome, faPhone } from "@fortawesome/free-solid-svg-icons";
 
 function Footer() {
   return (
@@ -20,9 +21,15 @@ function Footer() {
             Chuyên cung cấp các sản phẩm chất lượng cao với giá cả hợp lý
           </p>
           <div className="contact-info">
-            <p>📞 0123 456 789</p>
-            <p>📧 vinhdinh568@gmail.com</p>
-            <p>🏠 Bắc Yên, Sơn La</p>
+            <p>
+              <FontAwesomeIcon icon={faPhone} /> 0123 456 789
+            </p>
+            <p>
+              <FontAwesomeIcon icon={faEnvelope} /> vinhdinh568@gmail.com
+            </p>
+            <p>
+              <FontAwesomeIcon icon={faHome} /> Bắc Yên, Sơn La
+            </p>
           </div>
         </div>
 

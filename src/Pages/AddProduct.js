@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleLeft } from "@fortawesome/free-solid-svg-icons";
 import "./AddProduct.scss";
 
 function AddProduct() {
@@ -140,207 +142,214 @@ function AddProduct() {
   };
 
   return (
-    <div className="add-product">
-      <h2>{isEditMode ? "Sửa sản phẩm" : "Thêm sản phẩm"}</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>Tên sản phẩm</label>
-          <input
-            type="text"
-            name="title"
-            value={product.title}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>SKU</label>
-          <input
-            type="text"
-            name="sku"
-            value={product.sku}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>Danh mục</label>
-          <input
-            type="text"
-            name="category"
-            value={product.category}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>Giá</label>
-          <input
-            type="number"
-            name="pricing"
-            value={product.pricing}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>Số lượng</label>
-          <input
-            type="number"
-            name="quantity"
-            value={product.quantity}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>Hình ảnh</label>
-          <input
-            type="file"
-            name="images"
-            multiple
-            accept="image/jpeg,image/png"
-            onChange={(e) => handleFileChange(e, "images")}
-          />
-        </div>
-        <div className="form-group">
-          <label>Video</label>
-          <input
-            type="file"
-            name="videos"
-            multiple
-            accept="video/mp4"
-            onChange={(e) => handleFileChange(e, "videos")}
-          />
-        </div>
-        <div className="form-group">
-          <label>Mô tả</label>
-          <textarea
-            name="description"
-            value={product.description}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="form-group">
-          <label>Thương hiệu</label>
-          <input
-            type="text"
-            name="brand"
-            value={product.brand}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="form-group">
-          <label>Số model</label>
-          <input
-            type="text"
-            name="manufacture_details.model_number"
-            value={product.manufacture_details.model_number}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="form-group">
-          <label>Ngày phát hành</label>
-          <input
-            type="date"
-            name="manufacture_details.release_date"
-            value={
-              product.manufacture_details.release_date
-                ? new Date(product.manufacture_details.release_date)
-                    .toISOString()
-                    .split("T")[0]
-                : ""
-            }
-            onChange={handleChange}
-          />
-        </div>
-        <div className="form-group">
-          <label>Trọng lượng (kg)</label>
-          <input
-            type="number"
-            name="shipping_details.weight"
-            value={product.shipping_details.weight}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="form-group">
-          <label>Chiều rộng (cm)</label>
-          <input
-            type="number"
-            name="shipping_details.width"
-            value={product.shipping_details.width}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="form-group">
-          <label>Chiều cao (cm)</label>
-          <input
-            type="number"
-            name="shipping_details.height"
-            value={product.shipping_details.height}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="form-group">
-          <label>Chiều sâu (cm)</label>
-          <input
-            type="number"
-            name="shipping_details.depth"
-            value={product.shipping_details.depth}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="form-group">
-          <label>Thuộc tính (Màu sắc, Kích thước, Số lượng)</label>
-          {product.attributes.map((attr, index) => (
-            <div key={index} className="attribute-group">
-              <input
-                type="text"
-                name="color"
-                placeholder="Màu sắc"
-                value={attr.color}
-                onChange={(e) => handleAttributeChange(index, e)}
-              />
-              <input
-                type="text"
-                name="size"
-                placeholder="Kích thước"
-                value={attr.size}
-                onChange={(e) => handleAttributeChange(index, e)}
-              />
-              <input
-                type="number"
-                name="stock"
-                placeholder="Số lượng"
-                value={attr.stock}
-                onChange={(e) => handleAttributeChange(index, e)}
-              />
-              <button
-                type="button"
-                className="remove-attribute"
-                onClick={() => removeAttribute(index)}
-              >
-                Xóa
-              </button>
-            </div>
-          ))}
-          <button
-            type="button"
-            className="add-attribute"
-            onClick={addAttribute}
-          >
-            Thêm thuộc tính
+    <>
+      <FontAwesomeIcon
+        icon={faCircleLeft}
+        className="back"
+        onClick={() => navigate(-1)}
+      />
+      <div className="add-product">
+        <h2>{isEditMode ? "Sửa sản phẩm" : "Thêm sản phẩm"}</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label>Tên sản phẩm</label>
+            <input
+              type="text"
+              name="title"
+              value={product.title}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>SKU</label>
+            <input
+              type="text"
+              name="sku"
+              value={product.sku}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>Danh mục</label>
+            <input
+              type="text"
+              name="category"
+              value={product.category}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>Giá</label>
+            <input
+              type="number"
+              name="pricing"
+              value={product.pricing}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>Số lượng</label>
+            <input
+              type="number"
+              name="quantity"
+              value={product.quantity}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>Hình ảnh</label>
+            <input
+              type="file"
+              name="images"
+              multiple
+              accept="image/jpeg,image/png"
+              onChange={(e) => handleFileChange(e, "images")}
+            />
+          </div>
+          <div className="form-group">
+            <label>Video</label>
+            <input
+              type="file"
+              name="videos"
+              multiple
+              accept="video/mp4"
+              onChange={(e) => handleFileChange(e, "videos")}
+            />
+          </div>
+          <div className="form-group">
+            <label>Mô tả</label>
+            <textarea
+              name="description"
+              value={product.description}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="form-group">
+            <label>Thương hiệu</label>
+            <input
+              type="text"
+              name="brand"
+              value={product.brand}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="form-group">
+            <label>Số model</label>
+            <input
+              type="text"
+              name="manufacture_details.model_number"
+              value={product.manufacture_details.model_number}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="form-group">
+            <label>Ngày phát hành</label>
+            <input
+              type="date"
+              name="manufacture_details.release_date"
+              value={
+                product.manufacture_details.release_date
+                  ? new Date(product.manufacture_details.release_date)
+                      .toISOString()
+                      .split("T")[0]
+                  : ""
+              }
+              onChange={handleChange}
+            />
+          </div>
+          <div className="form-group">
+            <label>Trọng lượng (kg)</label>
+            <input
+              type="number"
+              name="shipping_details.weight"
+              value={product.shipping_details.weight}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="form-group">
+            <label>Chiều rộng (cm)</label>
+            <input
+              type="number"
+              name="shipping_details.width"
+              value={product.shipping_details.width}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="form-group">
+            <label>Chiều cao (cm)</label>
+            <input
+              type="number"
+              name="shipping_details.height"
+              value={product.shipping_details.height}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="form-group">
+            <label>Chiều sâu (cm)</label>
+            <input
+              type="number"
+              name="shipping_details.depth"
+              value={product.shipping_details.depth}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="form-group">
+            <label>Thuộc tính (Màu sắc, Kích thước, Số lượng)</label>
+            {product.attributes.map((attr, index) => (
+              <div key={index} className="attribute-group">
+                <input
+                  type="text"
+                  name="color"
+                  placeholder="Màu sắc"
+                  value={attr.color}
+                  onChange={(e) => handleAttributeChange(index, e)}
+                />
+                <input
+                  type="text"
+                  name="size"
+                  placeholder="Kích thước"
+                  value={attr.size}
+                  onChange={(e) => handleAttributeChange(index, e)}
+                />
+                <input
+                  type="number"
+                  name="stock"
+                  placeholder="Số lượng"
+                  value={attr.stock}
+                  onChange={(e) => handleAttributeChange(index, e)}
+                />
+                <button
+                  type="button"
+                  className="remove-attribute"
+                  onClick={() => removeAttribute(index)}
+                >
+                  Xóa
+                </button>
+              </div>
+            ))}
+            <button
+              type="button"
+              className="add-attribute"
+              onClick={addAttribute}
+            >
+              Thêm thuộc tính
+            </button>
+          </div>
+          <button type="submit" className="submit-button" disabled={loading}>
+            {loading
+              ? "Đang xử lý..."
+              : isEditMode
+              ? "Cập nhật"
+              : "Thêm sản phẩm"}
           </button>
-        </div>
-        <button type="submit" className="submit-button" disabled={loading}>
-          {loading
-            ? "Đang xử lý..."
-            : isEditMode
-            ? "Cập nhật"
-            : "Thêm sản phẩm"}
-        </button>
-      </form>
-    </div>
+        </form>
+      </div>
+    </>
   );
 }
 

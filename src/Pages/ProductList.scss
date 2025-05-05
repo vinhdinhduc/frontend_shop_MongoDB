@@ -134,6 +134,32 @@
           background: #e74c3c;
           color: white;
         }
+        .btn-buy-now {
+          background-color: #ff5722;
+          color: white;
+          border: none;
+          padding: 10px 15px;
+          border-radius: 5px;
+          cursor: pointer;
+          margin-right: -4px;
+        
+          &:hover {
+            background-color: #e64a19;
+          }
+        }
+        
+        .btn-add-to-cart {
+          background-color:rgb(230, 110, 101);
+          color: white;
+          border: 1px solid red;
+          padding: 10px 15px;
+          border-radius: 5px;
+          cursor: pointer;
+        
+          &:hover {
+            background-color:rgba(214, 73, 30, 1);
+          }
+        }
       }
     }
   }

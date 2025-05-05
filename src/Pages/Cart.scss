@@ -1,0 +1,217 @@
+@import '../variables';
+
+.cart-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+
+  .empty-cart {
+    text-align: center;
+    padding: 4rem 0;
+    
+    h2 {
+      color: $dark-gray;
+      margin-bottom: 2rem;
+    }
+
+    .continue-shopping {
+      background: $primary-color;
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: 5px;
+      text-decoration: none;
+      transition: background 0.3s;
+
+      &:hover {
+        background: darken($primary-color, 10%);
+      }
+    }
+  }
+
+  .cart-title {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: $dark-color;
+  }
+
+  .cart-content {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 2rem;
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .cart-items {
+    .cart-item {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr auto;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.5rem;
+      border-bottom: 1px solid #eee;
+      position: relative;
+
+      @media (max-width: 576px) {
+        grid-template-columns: 1fr;
+      }
+
+      .product-info {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+
+        .product-image {
+          width: 100px;
+          height: 100px;
+          object-fit: contain;
+          border-radius: 8px;
+        }
+
+        .product-title {
+          margin: 0;
+          font-size: 1.1rem;
+          color: $dark-color;
+        }
+
+        .product-price {
+          color: $secondary-color;
+          font-weight: bold;
+          margin-top: 0.5rem;
+        }
+      }
+
+      .quantity-controls {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+
+        button {
+          width: 35px;
+          height: 35px;
+          border: 1px solid #ddd;
+          background: white;
+          border-radius: 5px;
+          cursor: pointer;
+          font-size: 1.1rem;
+          transition: all 0.2s;
+
+          &:hover:not(:disabled) {
+            background: $light-gray;
+          }
+
+          &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+          }
+        }
+
+        input {
+          width: 50px;
+          text-align: center;
+          padding: 0.5rem;
+          border: 1px solid #ddd;
+          border-radius: 5px;
+        }
+      }
+
+      .item-total {
+        font-weight: bold;
+        color: $danger-color;
+        font-size: 1.1rem;
+      }
+
+      .remove-item {
+        background: none;
+        border: none;
+        color: $dark-gray;
+        font-size: 1.5rem;
+        cursor: pointer;
+        padding: 0 0.5rem;
+        transition: color 0.2s;
+
+        &:hover {
+          color: $danger-color;
+        }
+      }
+    }
+  }
+
+  .cart-summary {
+    background: $light-gray;
+    padding: 2rem;
+    border-radius: 10px;
+    height: fit-content;
+    position: sticky;
+    top: 1rem;
+
+    h3 {
+      margin-top: 0;
+      color: $dark-color;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 1rem;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin: 1rem 0;
+      padding: 0.5rem 0;
+
+      &.total {
+        font-size: 1.2rem;
+        font-weight: bold;
+        border-top: 1px solid #ddd;
+        padding-top: 1rem;
+        color: $danger-color;
+      }
+    }
+
+    .checkout-button {
+      width: 100%;
+      padding: 1rem;
+      background: $success-color;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      transition: background 0.3s;
+      margin-top: 1rem;
+
+      &:hover:not(:disabled) {
+        background: darken($success-color, 10%);
+      }
+
+      &:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+      }
+    }
+
+    .clear-cart {
+      width: 100%;
+      background: none;
+      border: none;
+      color: $danger-color;
+      margin-top: 1rem;
+      cursor: pointer;
+      text-decoration: underline;
+      padding: 0.5rem;
+
+      &:hover {
+        color: darken($danger-color, 10%);
+      }
+    }
+  }
+
+  @media (max-width: 576px) {
+    padding: 1rem;
+    
+    .cart-item {
+      padding: 1rem 0 !important;
+    }
+  }
+}

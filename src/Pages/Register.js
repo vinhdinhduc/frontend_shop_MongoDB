@@ -5,7 +5,13 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import "./Register.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEye,
+  faEyeSlash,
+  faEnvelope,
+  faUser,
+  faLock,
+} from "@fortawesome/free-solid-svg-icons";
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -80,7 +86,10 @@ function Register() {
         <h2>Tạo tài khoản</h2>
         {error && <div className="error-message">{error}</div>}
         <div className="form-group">
-          <label> Họ Và Tên</label>
+          <label>
+            {" "}
+            Họ Và Tên <FontAwesomeIcon icon={faUser} />{" "}
+          </label>
           <input
             type="text"
             name="name"
@@ -91,7 +100,9 @@ function Register() {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="">Nhập Email</label>
+          <label htmlFor="">
+            Nhập Email <FontAwesomeIcon icon={faEnvelope} />
+          </label>
           <input
             type="text"
             name="email"
@@ -102,7 +113,9 @@ function Register() {
           />
         </div>
         <div className="form-group password-input">
-          <label htmlFor="">Nhập mật khẩu</label>
+          <label htmlFor="">
+            Nhập mật khẩu <FontAwesomeIcon icon={faLock} />
+          </label>
           <div className="input-wrapper">
             <input
               type={showPassword ? "text" : "password"}
@@ -120,7 +133,9 @@ function Register() {
           </div>
         </div>
         <div className="form-group password-input">
-          <label htmlFor="">Nhập lại mật khẩu</label>
+          <label htmlFor="">
+            Nhập lại mật khẩu <FontAwesomeIcon icon={faLock} />
+          </label>
           <div className="input-wrapper">
             <input
               type={showConfirmPassword ? "text" : "password"}

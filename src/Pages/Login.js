@@ -2,7 +2,12 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEye,
+  faEyeSlash,
+  faEnvelope,
+  faLock,
+} from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "./Login.scss";
@@ -72,7 +77,9 @@ function Login() {
         {error && <div className="error-message">{error}</div>}
 
         <div className="form-group">
-          <label>Email</label>
+          <label>
+            Email <FontAwesomeIcon icon={faEnvelope} />
+          </label>
           <input
             type="email"
             name="email"
@@ -84,7 +91,9 @@ function Login() {
         </div>
 
         <div className="form-group password-input">
-          <label>Mật khẩu</label>
+          <label>
+            Mật khẩu <FontAwesomeIcon icon={faLock} />
+          </label>
           <div className="input-wrapper">
             <input
               type={showPassword ? "text" : "password"}

@@ -28,7 +28,7 @@ $hover-color: #2980b9;
       img {
         height: 40px;
         width: auto;
-        border: none;
+        border-radius: 50%;
       }
     }
 
@@ -53,8 +53,8 @@ $hover-color: #2980b9;
             }
           }
           .nav_link.active {
-            background-color: #4be772;
-            border: 2px solid  #4be7cd;
+            background-color: #e7b04b;
+            border: 2px solid  #e4e74b;
             padding: 10px;
             font-weight: bold;
             

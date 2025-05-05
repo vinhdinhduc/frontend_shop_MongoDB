@@ -3,8 +3,16 @@ import { Link, useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { useAuth } from "../context/AuthContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCartPlus,
+  faCircleLeft,
+  faPlus,
+  faShoppingCart,
+} from "@fortawesome/free-solid-svg-icons";
 import Header from "../Components/Headers";
 import fallback from "../assets/image/fallback.jpg";
+
 import "./ProductList.scss";
 
 function ProductList() {
@@ -104,8 +112,19 @@ function ProductList() {
         setSelectAll(false);
         toast.success(`Đã xóa ${selectedProducts.length} sản phẩm`);
       } catch (error) {
-        toast.error("Xóa hàng loạt thất bại");
+        toast.error("Xóa tất cả thất bại");
       }
+    }
+  };
+  const handleBuyNow = (productId) => {
+    navigate(`/checkout?product=${productId}`);
+  };
+  const handleAddToCart = async (productId) => {
+    try {
+      await axios.post("http://localhost:8080/api/cart", { productId });
+      toast.success("Sản phẩm đã được thêm vào giỏ hàng");
+    } catch (error) {
+      toast.error("Thêm vào giỏ hàng thất bại");
     }
   };
 
@@ -287,7 +306,7 @@ function ProductList() {
                   <Link to={`/products/${product._id}`} className="btn-detail">
                     <i className="fas fa-eye"></i> Chi tiết
                   </Link>
-                  {user?.role === "admin" && (
+                  {user?.role === "admin" ? (
                     <>
                       <button
                         className="btn-edit"
@@ -302,6 +321,21 @@ function ProductList() {
                         onClick={() => handleDeleteProduct(product._id)}
                       >
                         <i className="fas fa-trash-alt"></i> Xóa
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <button
+                        className="btn-add-to-cart"
+                        onClick={() => handleAddToCart(product._id)}
+                      >
+                        <FontAwesomeIcon icon={faCartPlus} /> Thêm vào giỏ hàng
+                      </button>
+                      <button
+                        className="btn-buy-now"
+                        onClick={() => handleBuyNow(product._id)}
+                      >
+                        Mua ngay
                       </button>
                     </>
                   )}
