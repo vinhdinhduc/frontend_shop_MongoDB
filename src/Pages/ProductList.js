@@ -3,16 +3,21 @@ import { Link, useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { useAuth } from "../context/AuthContext";
+import { useCart } from "../context/CartContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCartPlus,
+  faCircleInfo,
   faCircleLeft,
+  faDollar,
+  faPenToSquare,
   faPlus,
   faShoppingCart,
+  faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import Header from "../Components/Headers";
 import fallback from "../assets/image/fallback.jpg";
-
+import AddToCart from "../Components/AddToCart";
 import "./ProductList.scss";
 
 function ProductList() {
@@ -36,8 +41,9 @@ function ProductList() {
   });
   const [sort, setSort] = useState("");
 
-  const { user } = useAuth();
+  const { user, token } = useAuth(); // Lấy cả token từ context
   const navigate = useNavigate();
+  const { addToCart } = useCart();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -46,14 +52,23 @@ function ProductList() {
           ...filters,
           sort,
         }).toString();
-        const [productsRes, trashCountRes] = await Promise.all([
-          axios.get(`http://localhost:8080/api/products?${params}`),
-          axios.get("http://localhost:8080/api/products/trash"),
-        ]);
+
+        const productsRes = await axios.get(
+          `http://localhost:8080/api/products?${params}`
+        );
+
+        let trashCount = 0;
+        if (user?.role === "admin") {
+          const trashCountRes = await axios.get(
+            "http://localhost:8080/api/products/trash"
+          );
+          trashCount = trashCountRes.data.count;
+        }
 
         setProducts(productsRes.data.filter((p) => !p.deleted));
-        setDeletedProductsCount(trashCountRes.data.count);
+        setDeletedProductsCount(trashCount);
       } catch (err) {
+        console.error("Lỗi khi lấy dữ liệu:", err);
         setError("Không thể tải dữ liệu");
         toast.error("Lỗi kết nối server");
       } finally {
@@ -62,12 +77,14 @@ function ProductList() {
     };
 
     fetchData();
-  }, [filters, sort]);
+  }, [filters, sort, user?.role]);
 
   const handleDeleteProduct = async (id) => {
+    console.log("Xóa sản phẩm với ID:", id); // Log ID
+    console.log("URL gửi đến API:", `http://localhost:8080/api/products/${id}`);
     if (window.confirm("Bạn có chắc chắn muốn xóa sản phẩm này?")) {
       try {
-        await axios.put(`http://localhost:8080/api/products/soft-delete/${id}`);
+        await axios.delete(`http://localhost:8080/api/products/${id}`);
         setProducts(products.filter((p) => p._id !== id));
         setDeletedProductsCount((prev) => prev + 1);
         toast.success("Đã chuyển vào thùng rác");
@@ -116,16 +133,12 @@ function ProductList() {
       }
     }
   };
+
   const handleBuyNow = (productId) => {
     navigate(`/checkout?product=${productId}`);
   };
-  const handleAddToCart = async (productId) => {
-    try {
-      await axios.post("http://localhost:8080/api/cart", { productId });
-      toast.success("Sản phẩm đã được thêm vào giỏ hàng");
-    } catch (error) {
-      toast.error("Thêm vào giỏ hàng thất bại");
-    }
+  const handleAddToCart = (productId) => {
+    addToCart(productId, 1);
   };
 
   const handleFilterChange = (e) => {
@@ -189,30 +202,36 @@ function ProductList() {
               value={filters.search}
               onChange={handleFilterChange}
             />
-            <select
-              name="category"
-              value={filters.category}
-              onChange={handleFilterChange}
-            >
-              <option value="">Tất cả danh mục</option>
-              {categories.map((cat) => (
-                <option key={cat._id} value={cat.name}>
-                  {cat.name}
-                </option>
-              ))}
-            </select>
-            <select
-              name="brand"
-              value={filters.brand}
-              onChange={handleFilterChange}
-            >
-              <option value="">Tất cả thương hiệu</option>
-              {brands.map((brand) => (
-                <option key={brand._id} value={brand.name}>
-                  {brand.name}
-                </option>
-              ))}
-            </select>
+            {/* Chỉ hiển thị các bộ lọc nếu có dữ liệu */}
+            {categories.length > 0 && (
+              <select
+                name="category"
+                value={filters.category}
+                onChange={handleFilterChange}
+              >
+                <option value="">Tất cả danh mục</option>
+                {categories.map((cat) => (
+                  <option key={cat._id} value={cat.name}>
+                    {cat.name}
+                  </option>
+                ))}
+              </select>
+            )}
+
+            {brands.length > 0 && (
+              <select
+                name="brand"
+                value={filters.brand}
+                onChange={handleFilterChange}
+              >
+                <option value="">Tất cả thương hiệu</option>
+                {brands.map((brand) => (
+                  <option key={brand._id} value={brand.name}>
+                    {brand.name}
+                  </option>
+                ))}
+              </select>
+            )}
 
             <input
               type="number"
@@ -304,7 +323,8 @@ function ProductList() {
                 </div>
                 <div className="action-buttons">
                   <Link to={`/products/${product._id}`} className="btn-detail">
-                    <i className="fas fa-eye"></i> Chi tiết
+                    Chi tiết{" "}
+                    <FontAwesomeIcon icon={faCircleInfo} className="btn-info" />
                   </Link>
                   {user?.role === "admin" ? (
                     <>
@@ -314,17 +334,18 @@ function ProductList() {
                           navigate(`/products/edit/${product._id}`)
                         }
                       >
-                        <i className="fas fa-edit"></i> Sửa
+                        <FontAwesomeIcon icon={faPenToSquare} /> Sửa
                       </button>
                       <button
                         className="btn-delete"
                         onClick={() => handleDeleteProduct(product._id)}
                       >
-                        <i className="fas fa-trash-alt"></i> Xóa
+                        <FontAwesomeIcon icon={faTrash} /> Xóa
                       </button>
                     </>
                   ) : (
                     <>
+                      {/* <AddToCart product={product} /> */}
                       <button
                         className="btn-add-to-cart"
                         onClick={() => handleAddToCart(product._id)}
@@ -335,7 +356,7 @@ function ProductList() {
                         className="btn-buy-now"
                         onClick={() => handleBuyNow(product._id)}
                       >
-                        Mua ngay
+                        <FontAwesomeIcon icon={faDollar} /> Mua ngay
                       </button>
                     </>
                   )}

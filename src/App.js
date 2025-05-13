@@ -28,6 +28,7 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/products" element={<ProductList />} />
             <Route path="/add-product" element={<AddProduct />} />
+            <Route path="/cart" element={<Cart />} />
             <Route
               path="/products/edit/:id"
               element={

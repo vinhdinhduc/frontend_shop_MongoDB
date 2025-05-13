@@ -42,9 +42,10 @@ function Login() {
       );
 
       if (response.data.success) {
+        const { user, token } = response.data;
         login({
-          ...response.data.user,
-          token: response.data.token,
+          user,
+          token,
         });
 
         navigate("/");

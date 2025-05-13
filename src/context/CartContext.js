@@ -1,56 +1,76 @@
-import React, { createContext, useContext, useState } from "react";
+// CartContext.js - không dùng reducer, dùng state thuần và load giỏ hàng từ backend
+import React, { createContext, useContext, useState, useEffect } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { useAuth } from "./AuthContext";
 
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-  const [cart, setCart] = useState([]);
+  const [cartItems, setCartItems] = useState([]);
+  const { user, token } = useAuth();
 
-  // Thêm sản phẩm vào giỏ hàng
-  const addToCart = (product) => {
-    setCart((prevCart) => {
-      const existingProduct = prevCart.find((item) => item.id === product.id);
-      if (existingProduct) {
-        // Nếu sản phẩm đã tồn tại, tăng số lượng
-        return prevCart.map((item) =>
-          item.id === product.id
-            ? { ...item, quantity: item.quantity + product.quantity }
-            : item
-        );
-      } else {
-        // Nếu sản phẩm chưa tồn tại, thêm vào giỏ hàng
-        return [...prevCart, product];
-      }
-    });
+  const fetchCartFromServer = async () => {
+    if (!user?._id || !token) return;
+
+    try {
+      const res = await axios.get(
+        `http://localhost:8080/api/cart/${user._id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setCartItems(res.data.items || []);
+      console.log("[CartContext] Fetched from server:", res.data.items);
+    } catch (error) {
+      console.error("[CartContext] Lỗi khi lấy giỏ hàng:", error);
+      toast.error("Không thể lấy giỏ hàng");
+    }
   };
 
-  // Xóa sản phẩm khỏi giỏ hàng
+  useEffect(() => {
+    if (user && token) {
+      fetchCartFromServer();
+    }
+  }, [user, token]);
+
+  const addToCart = async (productId, quantity = 1) => {
+    if (!user?._id || !token) {
+      toast.warn("Vui lòng đăng nhập trước");
+      return;
+    }
+
+    try {
+      const res = await axios.post(
+        "http://localhost:8080/api/cart",
+        { productId, quantity },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      toast.success("Đã thêm vào giỏ hàng");
+      fetchCartFromServer();
+    } catch (error) {
+      console.error("[CartContext] Lỗi khi thêm:", error);
+      toast.error("Không thể thêm vào giỏ hàng");
+    }
+  };
+
   const removeFromCart = (productId) => {
-    setCart((prevCart) => prevCart.filter((item) => item.id !== productId));
+    setCartItems((prev) => prev.filter((item) => item.productId !== productId));
+    toast.info("Đã xóa sản phẩm");
   };
 
-  // Cập nhật số lượng sản phẩm trong giỏ hàng
-  const updateQuantity = (productId, quantity) => {
-    setCart((prevCart) =>
-      prevCart.map((item) =>
-        item.id === productId ? { ...item, quantity } : item
-      )
-    );
-  };
-
-  // Xóa toàn bộ giỏ hàng
   const clearCart = () => {
-    setCart([]);
+    setCartItems([]);
+    toast.info("Đã xóa toàn bộ giỏ hàng");
   };
 
   return (
     <CartContext.Provider
-      value={{ cart, addToCart, removeFromCart, updateQuantity, clearCart }}
+      value={{ cartItems, addToCart, removeFromCart, clearCart }}
     >
       {children}
     </CartContext.Provider>
   );
 };
 
-export const useCart = () => {
-  return useContext(CartContext);
-};
+export const useCart = () => useContext(CartContext);

@@ -74,7 +74,7 @@ function Footer() {
 
       {/* Copyright */}
       <div className="footer-bottom">
-        <p>© 2025 YourShop. All rights reserved</p>
+        <p>© 2025 YourShop. DucVinh_Dev</p>
       </div>
     </footer>
   );

@@ -1,4 +1,5 @@
 import React from "react";
+import { motion } from "framer-motion";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -11,9 +12,11 @@ import "react-toastify/dist/ReactToastify.css";
 import { useAuth } from "../context/AuthContext"; // Giả sử bạn đã có AuthContext
 import "./Header.scss";
 import shoppe from "../assets/image/shoppe.jpg";
+import { useCart } from "../context/CartContext";
 
 function Header() {
   const location = useLocation();
+  const { cartItems } = useCart();
   const navigate = useNavigate();
   const { isLoggedIn, user, logout } = useAuth(); // Lấy trạng thái đăng nhập từ Context
 
@@ -42,36 +45,33 @@ function Header() {
 
           <nav className="header_nav">
             <ul className="nav_list">
-              <li className="nav_item">
-                <Link
-                  to="/"
-                  className={`nav_link ${
-                    location.pathname === "/" ? "active" : ""
+              {[
+                { path: "/", label: "Trang chủ" },
+                { path: "/products", label: "Sản Phẩm" },
+                { path: "/about", label: "Về chúng tôi" },
+              ].map((item) => (
+                <motion.li
+                  key={item.path}
+                  className={`nav_item ${
+                    location.pathname === item.path ? "active" : ""
                   }`}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
                 >
-                  Trang chủ
-                </Link>
-              </li>
-              <li className="nav_item">
-                <Link
-                  to="/products"
-                  className={`nav_link ${
-                    location.pathname === "/products" ? "active" : ""
-                  }`}
-                >
-                  Sản Phẩm
-                </Link>
-              </li>
-              <li className="nav_item">
-                <Link
-                  to="/about"
-                  className={`nav_link ${
-                    location.pathname === "/about" ? "active" : ""
-                  }`}
-                >
-                  Về chúng tôi
-                </Link>
-              </li>
+                  <Link to={item.path} className="nav_link">
+                    {item.label}
+                  </Link>
+                  {location.pathname === item.path && (
+                    <motion.div
+                      className="active-indicator"
+                      layoutId="active-indicator"
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.3 }}
+                    />
+                  )}
+                </motion.li>
+              ))}
             </ul>
           </nav>
         </div>
@@ -104,7 +104,7 @@ function Header() {
             <div className="user-section">
               <Link to="/profile" className="user-info">
                 <FontAwesomeIcon icon={faUser} className="user-icon" />
-                <span className="user-email">{user?.email}</span>
+                <span className="user-email">{user?.name}</span>
               </Link>
               <button onClick={handleLogout} className="logout-button">
                 <FontAwesomeIcon icon={faSignOutAlt} />
@@ -131,7 +131,7 @@ function Header() {
                 <span className="cart-icon">
                   <FontAwesomeIcon icon={faCartShopping} />
                 </span>
-                <span className="cart-count">0</span>
+                <span className="cart-count">{cartItems.length}</span>
               </Link>
             </div>
           )}

@@ -4,7 +4,10 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAuth } from "../context/AuthContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleLeft } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCircleLeft,
+  faTrashArrowUp,
+} from "@fortawesome/free-solid-svg-icons";
 import Header from "../Components/Headers";
 import "./TrashList.scss";
 
@@ -55,7 +58,18 @@ function TrashList() {
     }
   };
   const handleEmptyTrash = async () => {
-    if (window.confirm("Bạn có chắc chắn muốn dọn sạch thùng rác? Hành ")) {
+    if (deletedProducts.length === 0) {
+      toast.warn("Thùng rác trống, không có gì để dọn dẹp!", {
+        position: "top-center",
+      });
+
+      return;
+    }
+    if (
+      window.confirm(
+        "Bạn có chắc chắn muốn dọn sạch thùng rác? Hành động này sẽ không thể khôi phục! "
+      )
+    ) {
       try {
         await axios.delete("http://localhost:8080/api/products/trash/empty");
         setDeletedProducts([]);
@@ -74,7 +88,9 @@ function TrashList() {
           className="back"
           onClick={() => navigate(-1)}
         />
-        <h2>Thùng rác</h2>
+        <h2>
+          Thùng rác <FontAwesomeIcon icon={faTrashArrowUp} />
+        </h2>
 
         <div className="trash-actions">
           <button className="empty-trash" onClick={() => handleEmptyTrash()}>
