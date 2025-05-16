@@ -1,23 +1,19 @@
-import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
-import React, { useState, useEffect } from "react";
-import { toast } from "react-toastify";
-import { useAuth } from "../context/AuthContext";
-import { useCart } from "../context/CartContext";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCartPlus,
   faCircleInfo,
-  faCircleLeft,
   faDollar,
   faPenToSquare,
-  faPlus,
-  faShoppingCart,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
-import Header from "../Components/Headers";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import fallback from "../assets/image/fallback.jpg";
-import AddToCart from "../Components/AddToCart";
+import Header from "../Components/Headers";
+import { useAuth } from "../context/AuthContext";
+import { useCart } from "../context/CartContext";
 import "./ProductList.scss";
 
 function ProductList() {
@@ -137,6 +133,7 @@ function ProductList() {
   const handleBuyNow = (productId) => {
     navigate(`/checkout?product=${productId}`);
   };
+
   const handleAddToCart = (productId) => {
     addToCart(productId, 1);
   };

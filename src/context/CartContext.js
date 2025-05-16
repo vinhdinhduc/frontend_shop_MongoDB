@@ -1,76 +1,92 @@
-// CartContext.js - không dùng reducer, dùng state thuần và load giỏ hàng từ backend
 import React, { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
-import { toast } from "react-toastify";
 import { useAuth } from "./AuthContext";
+import { toast } from "react-toastify";
 
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-  const [cartItems, setCartItems] = useState([]);
+  const [cart, setCart] = useState({ items: [] }); // Khởi tạo cart với items là mảng rỗng
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const { user, token } = useAuth();
 
+  // Đưa hàm fetchCartFromServer ra ngoài useEffect
   const fetchCartFromServer = async () => {
-    if (!user?._id || !token) return;
-
+    setLoading(true);
     try {
+      if (!user || !token) {
+        setCart({ items: [] }); // Cập nhật cả cart khi không có user hoặc token
+        return;
+      }
       const res = await axios.get(
         `http://localhost:8080/api/cart/${user._id}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
-      setCartItems(res.data.items || []);
-      console.log("[CartContext] Fetched from server:", res.data.items);
+      console.log("Dữ liệu trả về từ API:", res.data);
+      setCart(res.data || { items: [] }); // Gán cho cart
+      console.log("[CartContext] Fetched cart:", res.data);
     } catch (error) {
       console.error("[CartContext] Lỗi khi lấy giỏ hàng:", error);
       toast.error("Không thể lấy giỏ hàng");
+      setError(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    if (user && token) {
-      fetchCartFromServer();
-    }
+    fetchCartFromServer();
   }, [user, token]);
 
   const addToCart = async (productId, quantity = 1) => {
-    if (!user?._id || !token) {
-      toast.warn("Vui lòng đăng nhập trước");
-      return;
-    }
-
     try {
-      const res = await axios.post(
-        "http://localhost:8080/api/cart",
+      await axios.post(
+        `http://localhost:8080/api/cart`,
         { productId, quantity },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      toast.success("Đã thêm vào giỏ hàng");
+      // Sau khi thêm thành công, gọi lại fetchCartFromServer để cập nhật giỏ hàng
       fetchCartFromServer();
+      toast.success("Thêm vào giỏ hàng thành công", { position: "top-center" });
     } catch (error) {
-      console.error("[CartContext] Lỗi khi thêm:", error);
+      console.error("Lỗi khi thêm vào giỏ hàng:", error);
+      setError(error.message);
       toast.error("Không thể thêm vào giỏ hàng");
     }
   };
 
-  const removeFromCart = (productId) => {
-    setCartItems((prev) => prev.filter((item) => item.productId !== productId));
-    toast.info("Đã xóa sản phẩm");
+  const removeFromCart = async (productId) => {
+    try {
+      await axios.delete(
+        `http://localhost:8080/api/cart/${user._id}/${productId}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      // Sau khi xóa thành công, gọi lại fetchCartFromServer để cập nhật giỏ hàng
+      fetchCartFromServer();
+    } catch (error) {
+      console.error("Lỗi khi xóa khỏi giỏ hàng:", error);
+      setError(error.message);
+      toast.error("Không thể xóa khỏi giỏ hàng");
+    }
   };
 
   const clearCart = () => {
-    setCartItems([]);
-    toast.info("Đã xóa toàn bộ giỏ hàng");
+    setCart({ items: [] });
   };
 
-  return (
-    <CartContext.Provider
-      value={{ cartItems, addToCart, removeFromCart, clearCart }}
-    >
-      {children}
-    </CartContext.Provider>
-  );
+  const value = {
+    cart,
+    loading,
+    error,
+    addToCart,
+    removeFromCart,
+    clearCart,
+  };
+
+  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 };
 
-export const useCart = () => useContext(CartContext);
+export const useCart = () => {
+  return useContext(CartContext);
+};

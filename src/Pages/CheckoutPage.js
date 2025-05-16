@@ -1,126 +1,154 @@
-import { useState } from "react";
+// CheckoutPage.jsx
+import React, { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Footer from "../Components/Footer";
+import "./CheckoutPage.scss";
+import { faMessage, faRocket } from "@fortawesome/free-solid-svg-icons";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const CheckoutPage = () => {
-  const [showCheckout, setShowCheckout] = useState(false);
-  const [formData, setFormData] = useState({
-    email: "",
-    cardNumber: "",
-    expiryDate: "",
-    cvc: "",
-  });
+  const [paymentMethod, setPaymentMethod] = useState("cod");
+  const [voucher, setVoucher] = useState("");
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Xử lý logic thanh toán ở đây
-    alert("Thanh toán thành công!");
-    setShowCheckout(false);
+  // Dữ liệu mẫu
+  const address = {
+    name: "Đức Vình",
+    phone: "(+84) 349229870",
+    fullAddress:
+      "Xóm trọ Quỳnh anh, Bản Dửn, xã Chiềng Ngần, TP.Sơn La, Sơn La",
   };
 
-  const handleInputChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.id]: e.target.value,
-    });
-  };
+  const products = [
+    {
+      id: 1,
+      name: "Quần Jean Đen Nam Ống rộng",
+      variant: "TOJ50000_Den.34",
+      price: 149000,
+      quantity: 1,
+      insurance: 1199,
+    },
+  ];
+
+  const shippingFee = 428700;
+  const total =
+    products.reduce((sum, p) => sum + p.price * p.quantity, 0) + shippingFee;
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <header className="bg-gray-800 text-white p-6 text-center">
-        <h1 className="text-2xl mb-4">Website Bán Hàng</h1>
-        <button
-          onClick={() => setShowCheckout(true)}
-          className="bg-green-500 hover:bg-green-600 px-6 py-2 rounded"
-        >
-          Mua Ngay
-        </button>
-      </header>
+    <>
+      <div className="checkout-page">
+        <header className="checkout-header">
+          <h1>
+            <span onClick={() => navigate("/")}>Shop sale </span>| Thanh Toán
+          </h1>
+        </header>
 
-      {showCheckout && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold">Thông tin thanh toán</h2>
-              <button
-                onClick={() => setShowCheckout(false)}
-                className="text-gray-500 hover:text-gray-700 text-2xl"
-              >
-                &times;
-              </button>
-            </div>
-
-            <form onSubmit={handleSubmit}>
-              <div className="mb-4">
-                <label htmlFor="email" className="block mb-2 font-medium">
-                  Email:
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  required
-                  onChange={handleInputChange}
-                  className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500"
-                  placeholder="nhập email của bạn..."
-                />
-              </div>
-
-              <div className="mb-4">
-                <label htmlFor="cardNumber" className="block mb-2 font-medium">
-                  Số thẻ:
-                </label>
-                <input
-                  type="text"
-                  id="cardNumber"
-                  required
-                  pattern="[0-9\s]{13,19}"
-                  onChange={handleInputChange}
-                  className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500"
-                  placeholder="1234 5678 9012 3456"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-4 mb-6">
-                <div>
-                  <label
-                    htmlFor="expiryDate"
-                    className="block mb-2 font-medium"
-                  >
-                    Hết hạn:
-                  </label>
-                  <input
-                    type="text"
-                    id="expiryDate"
-                    required
-                    placeholder="MM/YY"
-                    onChange={handleInputChange}
-                    className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="cvc" className="block mb-2 font-medium">
-                    CVC:
-                  </label>
-                  <input
-                    type="text"
-                    id="cvc"
-                    required
-                    placeholder="123"
-                    onChange={handleInputChange}
-                    className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
-              </div>
-
-              <button
-                type="submit"
-                className="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 px-4 rounded transition-colors"
-              >
-                Xác nhận thanh toán
-              </button>
-            </form>
+        {/* Phần địa chỉ */}
+        <section className="address-section">
+          <div className="address-header">
+            <h2>Địa Chỉ Nhận Hàng</h2>
+            <button className="change-btn">Thay Đổi</button>
           </div>
-        </div>
-      )}
-    </div>
+          <div className="address-info">
+            <p>
+              <strong>
+                {address.name} {address.phone}
+              </strong>
+            </p>
+            <p>{address.fullAddress}</p>
+          </div>
+        </section>
+
+        {/* Danh sách sản phẩm */}
+        <section className="product-section">
+          <div className="shop-header">
+            <span>DRAGON STUDIO</span>
+            <button className="chat-btn">
+              Chat ngay <FontAwesomeIcon icon={faMessage} />
+            </button>
+          </div>
+
+          {products.map((product) => (
+            <div key={product.id} className="product-item">
+              <div className="product-info">
+                <h3>{product.name}</h3>
+                <div className="variant">Loại: {product.variant}</div>
+                <div className="insurance">
+                  <span>Bảo hiểm Thời trang</span>
+                  <span>₫{product.insurance.toLocaleString()}</span>
+                </div>
+              </div>
+
+              <div className="price-info">
+                <div className="price-row">
+                  <span>Đơn giá</span>
+                  <span>₫{product.price.toLocaleString()}</span>
+                </div>
+                <div className="price-row">
+                  <span>Số lượng</span>
+                  <span>{product.quantity}</span>
+                </div>
+                <div className="price-row total">
+                  <span>Thành tiền</span>
+                  <span>
+                    ₫{(product.price * product.quantity).toLocaleString()}
+                  </span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </section>
+
+        {/* Voucher và phương thức thanh toán */}
+        <section className="payment-section">
+          <div className="voucher-section">
+            <input
+              type="text"
+              placeholder="Nhập mã Voucher"
+              value={voucher}
+              onChange={(e) => setVoucher(e.target.value)}
+            />
+            <button className="apply-btn">Áp dụng</button>
+          </div>
+
+          <div className="payment-methods">
+            <label className={paymentMethod === "cod" ? "active" : ""}>
+              <input
+                type="radio"
+                name="payment"
+                value="cod"
+                checked={paymentMethod === "cod"}
+                onChange={() => setPaymentMethod("cod")}
+              />
+              Thanh toán khi nhận hàng
+            </label>
+          </div>
+        </section>
+
+        {/* Tổng kết */}
+        <section className="summary-section">
+          <div className="summary-row">
+            <span>Tổng tiền hàng</span>
+            <span>₫{total.toLocaleString()}</span>
+          </div>
+          <div className="summary-row">
+            <span>Phí vận chuyển</span>
+            <span>₫{shippingFee.toLocaleString()}</span>
+          </div>
+          <div className="summary-row total">
+            <span>Tổng thanh toán</span>
+            <span>₫{total.toLocaleString()}</span>
+          </div>
+
+          <div className="terms">
+            Nhấn "Đặt hàng" đồng nghĩa với việc bạn đồng ý tuân theo{" "}
+            <a href="/">Điều khoản của chúng tôi</a>
+          </div>
+          <button className="order-btn">Đặt hàng</button>
+        </section>
+      </div>
+      <Footer />
+    </>
   );
 };
 

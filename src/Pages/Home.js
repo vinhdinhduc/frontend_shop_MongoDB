@@ -69,7 +69,7 @@ function Home() {
                 <div className="product-info">
                   <h3>{product.name}</h3>
                   <p className="brand">{product.brand}</p>
-                  <p className="price">{product.price.toLocaleString()}₫</p>
+                  <p className="price">{product.pricing?.toLocaleString()}₫</p>
                   <Link to={`/product/${product._id}`} className="detail-link">
                     Xem chi tiết
                   </Link>

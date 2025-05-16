@@ -7,18 +7,20 @@ import {
   faUser,
   faSignOutAlt,
 } from "@fortawesome/free-solid-svg-icons";
-import { toast } from "react-toastify"; // Import react-toastify
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useAuth } from "../context/AuthContext"; // Giả sử bạn đã có AuthContext
+import { useAuth } from "../context/AuthContext";
 import "./Header.scss";
 import shoppe from "../assets/image/shoppe.jpg";
 import { useCart } from "../context/CartContext";
 
 function Header() {
   const location = useLocation();
-  const { cartItems } = useCart();
+  const { cart } = useCart();
   const navigate = useNavigate();
-  const { isLoggedIn, user, logout } = useAuth(); // Lấy trạng thái đăng nhập từ Context
+  const { isLoggedIn, user, logout } = useAuth();
+
+  console.log("check usẻ", user);
 
   const handleLogout = () => {
     logout();
@@ -113,7 +115,7 @@ function Header() {
                 <span className="cart-icon">
                   <FontAwesomeIcon icon={faCartShopping} />
                 </span>
-                <span className="cart-count">{user?.cart?.length || 0}</span>
+                <span className="cart-count">{cart?.items?.length || 0}</span>
               </Link>
             </div>
           ) : (
@@ -126,13 +128,14 @@ function Header() {
                   Đăng ký
                 </Link>
               </div>
-
-              <Link onClick={handleCartClick} className="cart-button">
-                <span className="cart-icon">
-                  <FontAwesomeIcon icon={faCartShopping} />
-                </span>
-                <span className="cart-count">{cartItems.length}</span>
-              </Link>
+              {isLoggedIn && (
+                <Link onClick={handleCartClick} className="cart-button">
+                  <span className="cart-icon">
+                    <FontAwesomeIcon icon={faCartShopping} />
+                  </span>
+                  <span className="cart-count">{cart?.items?.length || 0}</span>
+                </Link>
+              )}
             </div>
           )}
         </div>

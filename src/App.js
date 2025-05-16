@@ -8,6 +8,7 @@ import Home from "./Pages/Home";
 import Login from "./Pages/Login";
 import AddProduct from "./Pages/AddProduct";
 import Register from "./Pages/Register";
+import CheckoutPage from "./Pages/CheckoutPage";
 import "./styles/globalstyle.scss";
 import { ToastContainer, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -29,6 +30,7 @@ function App() {
             <Route path="/products" element={<ProductList />} />
             <Route path="/add-product" element={<AddProduct />} />
             <Route path="/cart" element={<Cart />} />
+            <Route path="/checkout" element={<CheckoutPage />} />
             <Route
               path="/products/edit/:id"
               element={
@@ -46,7 +48,6 @@ function App() {
               }
             />
             <Route path="/product/:id" element={<ProductDetail />} />
-            <Route path="/cart" element={<Cart />} />
           </Routes>
           <ToastContainer
             position="top-right"
