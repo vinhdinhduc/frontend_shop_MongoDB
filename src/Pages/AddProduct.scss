@@ -1,196 +1,99 @@
-// CartPage.scss
-$shopee-orange: #ee4d2d;
-$border-color: #e5e5e5;
-
-.cart-page {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-  font-family: 'Arial', sans-serif;
-
-  .cart-header {
-    padding: 20px 0;
-    border-bottom: 2px solid $shopee-orange;
-    margin-bottom: 20px;
-
-    h1 {
-      color: $shopee-orange;
-      font-size: 24px;
-      margin: 0;
-    }
-  }
-}
-
-.cart-container {
-  display: flex;
-  gap: 20px;
-}
-
-.product-list {
-  flex: 2;
-  
-  .seller-section {
-    background: #fff8f8;
-    padding: 15px;
-    margin-bottom: 20px;
+.add-product {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     
-    h3 {
-      margin: 0 0 5px 0;
-      color: $shopee-orange;
-    }
-  }
-
-  .product-item {
-    display: flex;
-    background: white;
-    padding: 15px;
-    margin-bottom: 15px;
-    border: 1px solid $border-color;
-    border-radius: 3px;
-
-    .product-select {
-      margin-right: 15px;
-      display: flex;
-      align-items: center;
     }
 
-    .product-info {
-      flex-grow: 1;
-      
-      h4 {
-        margin: 0 0 10px 0;
-        font-size: 16px;
-      }
-
-      .product-details {
-        color: #666;
-        font-size: 14px;
-        margin: 0 0 8px 0;
-      }
-
-      .product-type {
-        color: $shopee-orange;
-        font-size: 14px;
-      }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
     }
 
-    .product-actions {
-      width: 150px;
-      text-align: right;
-      
-      .price {
-        color: $shopee-orange;
-        font-size: 18px;
+    .form-group {
+      margin-bottom: 15px;
+      label {
+        display: block;
+        margin-bottom: 5px;
         font-weight: bold;
-        margin-bottom: 10px;
       }
-
-      .quantity {
-        margin-bottom: 10px;
+      input,
+      textarea {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 1rem;
       }
-
-      .delete-btn {
-        background: none;
-        border: 1px solid $border-color;
-        padding: 5px 15px;
+      textarea {
+        height: 100px;
+        resize: vertical;
+      }
+      .attribute-group {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 10px;
+        input {
+          flex: 1;
+        }
+        .remove-attribute {
+          background-color: #dc3545;
+          color: white;
+          padding: 8px;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          &:hover {
+            background-color: #c82333;
+          }
+        }
+      }
+      .add-attribute {
+        background-color: #007bff;
+        color: white;
+        padding: 8px 12px;
+        border: none;
+        border-radius: 5px;
         cursor: pointer;
-        color: #666;
-
         &:hover {
-          background: #f8f8f8;
+          background-color: #0056b3;
         }
       }
     }
-  }
-}
 
-.cart-summary {
-  flex: 1;
-  background: white;
-  padding: 20px;
-  border: 1px solid $border-color;
-  height: fit-content;
-
-  .summary-header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-
-    .select-all {
+    .submit-button {
+      width: 100%;
+      padding: 10px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+      &:hover {
+        background-color: #218838;
+      }
+      &:disabled {
+        background-color: #6c757d;
+        cursor: not-allowed;
+      }
+    }
+  
+    .back {
+      color:rgb(0, 38, 255);
+      font-size: 40px;
       display: flex;
       align-items: center;
-      gap: 10px;
-    }
-
-    .action-buttons {
-      display: flex;
-      gap: 10px;
-      
-      button {
-        background: none;
-        border: 1px solid $border-color;
-        padding: 5px 10px;
-        cursor: pointer;
-      }
-    }
-  }
-
-  .total-section {
-    border-top: 1px solid $border-color;
-    padding-top: 20px;
-
-    .total-info {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 20px;
-      font-size: 18px;
-
-      .total-amount {
-        color: $shopee-orange;
-        font-weight: bold;
-      }
-    }
-
-    .checkout-btn {
-      width: 100%;
-      background: $shopee-orange;
-      color: white;
+      gap: 5px;
       border: none;
-      padding: 15px;
-      font-size: 18px;
+      padding: 10px 15px;
+      border-radius: 5px;
       cursor: pointer;
-      border-radius: 3px;
 
-      &:hover {
-        opacity: 0.9;
-      }
-    }
-  }
-
-  .coupon-section {
-    margin-top: 20px;
-    display: flex;
-    gap: 10px;
-
-    input {
-      flex: 1;
-      padding: 8px;
-      border: 1px solid $border-color;
-    }
-
-    button {
-      background: $shopee-orange;
-      color: white;
-      border: none;
-      padding: 8px 15px;
-      cursor: pointer;
-    }
-  }
-}
-
-// Thêm responsive design nếu cần
-@media (max-width: 768px) {
-  .cart-container {
-    flex-direction: column;
+  &:hover {
+    background-color: #e0e0e0;
   }
 }

@@ -319,7 +319,10 @@ function ProductList() {
                   <span className="stock">Tồn kho: {product.quantity}</span>
                 </div>
                 <div className="action-buttons">
-                  <Link to={`/products/${product._id}`} className="btn-detail">
+                  <Link
+                    to={`/product/detail/${product._id}`}
+                    className="btn-detail"
+                  >
                     Chi tiết{" "}
                     <FontAwesomeIcon icon={faCircleInfo} className="btn-info" />
                   </Link>

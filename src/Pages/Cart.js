@@ -5,14 +5,12 @@ import { useAuth } from "../context/AuthContext";
 import "./Cart.scss";
 
 const Cart = () => {
-  console.log("Cart component rendered");
   const { user } = useAuth();
-  const { cart, removeFromCart, clearCart } = useCart();
-  console.log("cart=======:", cart);
+  const { cart, removeFromCart } = useCart();
   const [selectAll, setSelectAll] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
   const navigate = useNavigate();
-  // Xử lý chọn từng sản phẩm
+
   const handleSelectItem = (productId) => {
     setSelectedItems((prev) =>
       prev.includes(productId)
@@ -20,17 +18,15 @@ const Cart = () => {
         : [...prev, productId]
     );
   };
+
   const handleBuyNow = () => {
     if (selectedItems.length === 0) {
       alert("Vui lòng chọn ít nhất một sản phẩm để mua");
       return;
     }
-    navigate("/checkout", {
-      state: { selectedItems },
-    });
+    navigate("/checkout", { state: { selectedItems } });
   };
 
-  // Xử lý chọn tất cả
   const handleSelectAll = () => {
     if (!cart?.items) return;
     if (selectAll) {
@@ -41,10 +37,7 @@ const Cart = () => {
     setSelectAll(!selectAll);
   };
 
-  // Tính tổng số sản phẩm đã chọn
   const totalItems = selectedItems.length;
-
-  // Tính tổng tiền các sản phẩm đã chọn
   const totalAmount =
     cart?.items
       ?.filter((item) => selectedItems.includes(item.productId._id))
@@ -53,27 +46,20 @@ const Cart = () => {
         0
       ) || 0;
 
-  // Xử lý thay đổi số lượng
-  const handleQuantityChange = (productId, e) => {};
-
-  // if (loading) return <div>Đang tải giỏ hàng...</div>;
-  // if (error) return <div className="error">{error}</div>;
-
   return (
-    <div className="cart-page">
-      <header className="cart-header">
+    <div className="cart">
+      <header className="cart__header">
         <h1>
           <span onClick={() => navigate(-1)}>Shop Sale</span> | Giỏ hàng
         </h1>
       </header>
 
-      <div className="cart-container">
-        <section className="product-list">
-          {cart?.items?.map((item) => {
-            console.log("Item:", item);
-            return (
-              <div key={item.productId._id} className="product-item">
-                <div className="product-select">
+      <div className="cart__container">
+        <section className="cart__products">
+          <div className="cart__products-list">
+            {cart?.items?.map((item) => (
+              <div key={item.productId._id} className="cart__product">
+                <div className="cart__product-select">
                   <input
                     type="checkbox"
                     checked={selectedItems.includes(item.productId._id)}
@@ -81,43 +67,41 @@ const Cart = () => {
                   />
                 </div>
 
-                <div className="product-info">
+                <div className="cart__product-info">
                   <h4>{item.productId?.title || "Không có tiêu đề"}</h4>
-                  <div className="product-type">
+                  <div className="cart__product-type">
                     Phân loại: {item?.attributes || "Không có phân loại"}
                   </div>
                 </div>
 
-                <div className="product-actions">
-                  <div className="price">
+                <div className="cart__product-actions">
+                  <div className="cart__product-price">
                     ₫{item.productId?.pricing?.toLocaleString()}
                   </div>
-                  <div className="quantity">
+                  <div className="cart__product-quantity">
                     Số lượng:{" "}
                     <input
                       type="number"
                       min={1}
                       value={item.quantity}
-                      onChange={(e) =>
-                        handleQuantityChange(item.productId._id, e)
-                      }
+                      onChange={(e) => console.log("Change quantity")}
                     />
                   </div>
                   <button
-                    className="delete-btn"
+                    className="cart__product-delete"
                     onClick={() => removeFromCart(item.productId._id)}
                   >
                     Xóa
                   </button>
                 </div>
               </div>
-            );
-          })}
+            ))}
+          </div>
         </section>
-        {/* Cart Summary */}
-        <section className="cart-summary">
-          <div className="summary-header">
-            <div className="select-all">
+
+        <section className="cart__summary">
+          <div className="cart__summary-header">
+            <div className="cart__summary-select-all">
               <input
                 type="checkbox"
                 checked={selectAll}
@@ -125,25 +109,25 @@ const Cart = () => {
               />
               <span>Chọn Tất Cả ({cart?.items?.length || 0})</span>
             </div>
-            <div className="action-buttons">
+            <div className="cart__summary-actions">
               <button>Xóa</button>
               <button>Lưu vào mục Đã thích</button>
             </div>
           </div>
 
-          <div className="total-section">
-            <div className="total-info">
+          <div className="cart__summary-total">
+            <div className="cart__summary-row">
               <span>Tổng cộng ({totalItems} Sản phẩm):</span>
-              <span className="total-amount">
+              <span className="cart__summary-amount">
                 ₫{totalAmount.toLocaleString()}
               </span>
             </div>
-            <button className="checkout-btn" onClick={handleBuyNow}>
+            <button className="cart__summary-checkout" onClick={handleBuyNow}>
               Mua Hàng
             </button>
           </div>
 
-          <div className="coupon-section">
+          <div className="cart__summary-coupon">
             <input placeholder="Chọn hoặc nhập mã" />
             <button>Áp dụng</button>
           </div>

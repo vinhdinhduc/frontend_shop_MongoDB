@@ -39,7 +39,7 @@ const CheckoutPage = () => {
       <div className="checkout-page">
         <header className="checkout-header">
           <h1>
-            <span onClick={() => navigate("/")}>Shop sale </span>| Thanh Toán
+            <span onClick={() => navigate(-1)}>Shop sale </span>| Thanh Toán
           </h1>
         </header>
 

@@ -28,7 +28,6 @@ function Login() {
     setError("");
     setLoading(true);
 
-    // Basic validation
     if (!formData.email || !formData.password) {
       setError("Vui lòng điền đầy đủ thông tin");
       setLoading(false);

@@ -16,8 +16,8 @@ function EditProduct() {
     quantity: "",
     description: "",
     brand: "",
-    images: [], // File mới
-    oldImages: [], // Ảnh cũ
+    images: [], 
+    oldImages: [], 
     videos: [],
     attributes: [{ color: "", size: "", stock: "" }],
     manufacture_details: { model_number: "", release_date: "" },
