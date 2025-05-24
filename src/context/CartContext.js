@@ -38,6 +38,25 @@ export const CartProvider = ({ children }) => {
   useEffect(() => {
     fetchCartFromServer();
   }, [user, token]);
+  const updateQuantity = async (productId, newQuantity) => {
+    try {
+      await axios.put(
+        `http://localhost:8080/api/cart/${user._id}/${productId}`,
+        { quantity: newQuantity },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setCart((prev) => ({
+        ...prev,
+        items: prev.items.map((item) =>
+          item.productId._id === productId
+            ? { ...item, quantity: newQuantity }
+            : item
+        ),
+      }));
+    } catch (error) {
+      toast.error("Cập nhật số lượng thất bại");
+    }
+  };
 
   const addToCart = async (productId, quantity = 1) => {
     try {
@@ -82,6 +101,7 @@ export const CartProvider = ({ children }) => {
     addToCart,
     removeFromCart,
     clearCart,
+    updateQuantity,
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

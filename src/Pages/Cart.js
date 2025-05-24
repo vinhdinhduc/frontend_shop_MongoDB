@@ -6,7 +6,7 @@ import "./Cart.scss";
 
 const Cart = () => {
   const { user } = useAuth();
-  const { cart, removeFromCart } = useCart();
+  const { cart, removeFromCart, updateQuantity } = useCart();
   const [selectAll, setSelectAll] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
   const navigate = useNavigate();
@@ -18,7 +18,12 @@ const Cart = () => {
         : [...prev, productId]
     );
   };
-
+  const handleChangeQuantity = (productId, e) => {
+    const newQuantity = parseInt(e.target.value);
+    if (!isNaN(newQuantity) && newQuantity > 0) {
+      updateQuantity(productId, newQuantity);
+    }
+  };
   const handleBuyNow = () => {
     if (selectedItems.length === 0) {
       alert("Vui lòng chọn ít nhất một sản phẩm để mua");
@@ -84,7 +89,9 @@ const Cart = () => {
                       type="number"
                       min={1}
                       value={item.quantity}
-                      onChange={(e) => console.log("Change quantity")}
+                      onChange={(e) =>
+                        handleChangeQuantity(item.productId._id, e)
+                      }
                     />
                   </div>
                   <button

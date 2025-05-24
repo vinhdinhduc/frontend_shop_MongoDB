@@ -1,6 +1,6 @@
 // AuthContext.js
 import React, { createContext, useEffect, useContext, useState } from "react";
-
+import axios from "axios";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -17,6 +17,20 @@ export const AuthProvider = ({ children }) => {
       setToken(token);
     }
   }, []);
+  const validateToken = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:8080/api/auth/validate",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      return response.data.valid;
+    } catch (error) {
+      logout();
+      return false;
+    }
+  };
 
   const login = ({ user, token }) => {
     // lưu cả user + token vào localStorage
@@ -32,7 +46,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, isLoggedIn, login, logout }}>
+    <AuthContext.Provider
+      value={{ user, token, isLoggedIn, login, logout, validateToken }}
+    >
       {children}
     </AuthContext.Provider>
   );
